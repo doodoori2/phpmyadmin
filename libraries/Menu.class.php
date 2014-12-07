@@ -494,7 +494,13 @@ class PMA_Menu
             $tabs['central_columns']['icon'] = 'centralColumns.png';
             $tabs['central_columns']['link'] = 'db_central_columns.php';
         }
-        return $tabs;
+
+	    // if (! $cfgRelation['central_columnswork']) {
+		    $tabs['tools']['text'] = __('Tools');
+		    $tabs['tools']['icon'] = 'normalize.png';
+		    $tabs['tools']['link'] = 'tools.php';
+
+	    return $tabs;
     }
 
     /**

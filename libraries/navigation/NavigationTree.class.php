@@ -280,7 +280,7 @@ class PMA_NavigationTree
 
         // Whether build other parts of the tree depends
         // on whether we have any paths in $this->_aPath
-        foreach ($this->_aPath as $key => $path) {
+	    foreach ($this->_aPath as $key => $path) {
             $retval = $this->_buildPathPart(
                 $path,
                 $this->_pos2_name[$key],
@@ -343,7 +343,6 @@ class PMA_NavigationTree
             }
         }
         $retval = $container;
-
         if (count($container->children) <= 1) {
             $dbData = $db->getData(
                 $container->real_name,
@@ -765,8 +764,8 @@ class PMA_NavigationTree
     public function renderState()
     {
         $this->_buildPath();
-        $retval  = $this->_quickWarp();
-        $retval .= '<div class="clearfloat"></div>';
+	    $retval  = $this->_quickWarp();
+	    $retval .= '<div class="clearfloat"></div>';
         $retval .= '<ul>';
         $retval .= $this->_fastFilterHtml($this->_tree);
         if (! $GLOBALS['cfg']['NavigationTreeDisableDatabaseExpansion']) {
@@ -777,7 +776,8 @@ class PMA_NavigationTree
         $this->groupTree();
         $retval .= "<div id='pma_navigation_tree_content'><ul>";
         $children = $this->_tree->children;
-        usort($children, array('PMA_NavigationTree', 'sortNode'));
+	    usort($children, array('PMA_NavigationTree', 'sortNode'));
+	    $children = $this->_add_tools($children);
         $this->_setVisibility();
         for ($i=0, $nbChildren = count($children); $i < $nbChildren; $i++) {
             if ($i == 0) {
@@ -1348,5 +1348,38 @@ class PMA_NavigationTree
         $retval .= '</div>';
         return $retval;
     }
+
+	private function _add_tools($children)
+	{
+		$tool        = PMA_NodeFactory::getInstance(
+			'Node', _pgettext('Tools', 'Tools')
+		);
+		$tool->isNew = true;
+		$tool->icon  = PMA_Util::getImage('normalize.png', '');
+		$tool->links = array(
+			'text' => 'tools.php?server=' . $GLOBALS['server']
+				. '&amp;token=' . $_SESSION[' PMA_token '],
+			'icon' => 'tools.php?server=' . $GLOBALS['server']
+				. '&amp;token=' . $_SESSION[' PMA_token '],
+		);
+		$tool->classes = '';
+		$this->_tree->addChild($tool);
+		$new_obj = null;
+		$ret = array();
+		$normal_child = array();
+		foreach($children as $child)
+		{
+			if($child->isNew)
+				$new_obj = $child;
+			else
+				$normal_child[] = $child;
+		}
+		if($new_obj != null) {
+			$ret = array_merge(array($new_obj), array($tool), $normal_child);
+		} else {
+			$ret = array_merge(array($tool), $normal_child);
+		}
+		return $ret;
+	}
 }
 ?>

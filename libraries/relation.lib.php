@@ -488,6 +488,8 @@ function PMA_checkRelationsParam()
             $cfgRelation['savedsearches']    = $curr_table[0];
         } elseif ($curr_table[0] == $GLOBALS['cfg']['Server']['central_columns']) {
             $cfgRelation['central_columns']    = $curr_table[0];
+        } elseif ($curr_table[0] == $GLOBALS['cfg']['Server']['limited_pma']) {
+            $cfgRelation['limited_pma']    = $curr_table[0];
         }
     } // end while
     $GLOBALS['dbi']->freeResult($tab_rs);
