@@ -1034,8 +1034,10 @@ var ResizeHandler = function () {
             });
         }
         // Set content bottom space beacuse of console
-        $('body').css('margin-bottom',
-                      $(window).height() + $(document).scrollTop() - $('#pma_console').offset().top + 'px');
+        if($('#pma_console').length) {
+            $('body').css('margin-bottom',
+                $(window).height() + $(document).scrollTop() - $('#pma_console').offset().top + 'px');
+        }
     };
     /* Initialisation section begins here */
     if ($.cookie('pma_navi_width')) {

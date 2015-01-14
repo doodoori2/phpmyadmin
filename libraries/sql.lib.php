@@ -8,6 +8,7 @@
 if (!defined('PHPMYADMIN')) {
     exit;
 }
+require_once './libraries/limited_features.lib.php';
 
 /**
  * Get the database name inside a query
@@ -754,6 +755,8 @@ function PMA_getHtmlForOptionsList($values, $selected_values)
 function PMA_getHtmlForBookmark($disp_mode, $cfgBookmark, $sql_query, $db, $table,
     $complete_query, $bkm_user
 ) {
+    if( !isAvailableFeature('bookmark', 'form'))
+        return;
     if ($disp_mode[7] == '1'
         && (! empty($cfgBookmark) && empty($_GET['id_bookmark']))
         && ! empty($sql_query)
@@ -1581,6 +1584,9 @@ function PMA_executeTheQuery($analyzed_sql_results, $full_sql_query, $is_gotofil
             $extra_data['indexes_list'] = PMA_Index::getView($table, $db);
         }
     }
+
+    // add history
+    PMA_setHistory(isset($db) ? $db : '', isset($table) ? $table : '', $GLOBALS['cfg']['Server']['user'], $full_sql_query);
 
     return array($result, $num_rows, $unlim_num_rows,
         isset($profiling_results) ? $profiling_results : null, $extra_data

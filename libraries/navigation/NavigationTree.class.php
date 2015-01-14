@@ -9,6 +9,8 @@ if (! defined('PHPMYADMIN')) {
     exit;
 }
 
+require_once 'libraries/custom_tools/custom_tools.lib.php';
+
 /**
  * Displays a collapsible of database objects in the navigation frame
  *
@@ -763,9 +765,10 @@ class PMA_NavigationTree
      */
     public function renderState()
     {
+        $cfgRelation = PMA_getRelationsParam();
         $this->_buildPath();
-	    $retval  = $this->_quickWarp();
-	    $retval .= '<div class="clearfloat"></div>';
+        $retval  = $this->_quickWarp();
+        $retval .= '<div class="clearfloat"></div>';
         $retval .= '<ul>';
         $retval .= $this->_fastFilterHtml($this->_tree);
         if (! $GLOBALS['cfg']['NavigationTreeDisableDatabaseExpansion']) {
@@ -776,21 +779,60 @@ class PMA_NavigationTree
         $this->groupTree();
         $retval .= "<div id='pma_navigation_tree_content'><ul>";
         $children = $this->_tree->children;
-	    usort($children, array('PMA_NavigationTree', 'sortNode'));
-	    $children = $this->_add_tools($children);
+        usort($children, array('PMA_NavigationTree', 'sortNode'));
+
+        if($cfgRelation['custom_toolswork']) {
+            $children = $this->_addCustomTool($children);
+        }
+
         $this->_setVisibility();
         for ($i=0, $nbChildren = count($children); $i < $nbChildren; $i++) {
+            $classes = array();
             if ($i == 0) {
-                $retval .= $this->_renderNode($children[0], true, 'first');
-            } else if ($i + 1 != $nbChildren) {
-                $retval .= $this->_renderNode($children[$i], true);
-            } else {
-                $retval .= $this->_renderNode($children[$i], true, 'last');
+                $classes[] = 'first';
             }
+            if ($i + 1 == $nbChildren) {
+                $classes[] = 'last';
+            }
+            $retval .= $this->_renderNode($children[$i], true, implode(" ", $classes));
         }
         $retval .= "</ul></div>";
         return $retval;
     }
+
+    private function _addCustomTool($children)
+    {
+        $tool        = PMA_NodeFactory::getInstance(
+            'Node', _pgettext('Tools', 'Tools')
+        );
+        // $tool->isNew = true;
+        $tool->icon  = PMA_Util::getImage('normalize.png', '');
+        $tool->links = array(
+            'text' => 'custom_tools.php?custom_tool=index&server=' . $GLOBALS['server']
+                . '&amp;token=' . $_SESSION[' PMA_token '],
+            'icon' => 'custom_tools.php?custom_tool=index&server=' . $GLOBALS['server']
+                . '&amp;token=' . $_SESSION[' PMA_token '],
+        );
+        $tool->classes = '';
+        $this->_tree->addChild($tool);
+        $new_obj = null;
+        $ret = array();
+        $normal_child = array();
+        foreach($children as $child)
+        {
+            if($child->isNew)
+                $new_obj = $child;
+            else
+                $normal_child[] = $child;
+        }
+        if($new_obj != null) {
+            $ret = array_merge(array($new_obj), array($tool), $normal_child);
+        } else {
+            $ret = array_merge(array($tool), $normal_child);
+        }
+        return $ret;
+    }
+
 
     /**
      * Renders a part of the tree, used for Ajax
@@ -1349,37 +1391,5 @@ class PMA_NavigationTree
         return $retval;
     }
 
-	private function _add_tools($children)
-	{
-		$tool        = PMA_NodeFactory::getInstance(
-			'Node', _pgettext('Tools', 'Tools')
-		);
-		$tool->isNew = true;
-		$tool->icon  = PMA_Util::getImage('normalize.png', '');
-		$tool->links = array(
-			'text' => 'tools.php?server=' . $GLOBALS['server']
-				. '&amp;token=' . $_SESSION[' PMA_token '],
-			'icon' => 'tools.php?server=' . $GLOBALS['server']
-				. '&amp;token=' . $_SESSION[' PMA_token '],
-		);
-		$tool->classes = '';
-		$this->_tree->addChild($tool);
-		$new_obj = null;
-		$ret = array();
-		$normal_child = array();
-		foreach($children as $child)
-		{
-			if($child->isNew)
-				$new_obj = $child;
-			else
-				$normal_child[] = $child;
-		}
-		if($new_obj != null) {
-			$ret = array_merge(array($new_obj), array($tool), $normal_child);
-		} else {
-			$ret = array_merge(array($tool), $normal_child);
-		}
-		return $ret;
-	}
 }
 ?>

@@ -8,6 +8,7 @@
 if (! defined('PHPMYADMIN')) {
     exit;
 }
+require_once './libraries/custom_tools/custom_tools.lib.php';
 
 /**
  * Class for generating the top menu
@@ -104,6 +105,9 @@ class PMA_Menu
         } else if (/*overload*/mb_strlen($this->_db)) {
             $tabs = $this->_getDbTabs();
             $level = 'db';
+        } else if (/*overload*/! empty($GLOBALS['custom_tool'])) {
+            $tabs = getCustomToolTabs();
+            $level = 'custom_tool';
         } else {
             $tabs = $this->_getServerTabs();
             $level = 'server';
@@ -495,12 +499,7 @@ class PMA_Menu
             $tabs['central_columns']['link'] = 'db_central_columns.php';
         }
 
-	    // if (! $cfgRelation['central_columnswork']) {
-		    $tabs['tools']['text'] = __('Tools');
-		    $tabs['tools']['icon'] = 'normalize.png';
-		    $tabs['tools']['link'] = 'tools.php';
-
-	    return $tabs;
+        return $tabs;
     }
 
     /**

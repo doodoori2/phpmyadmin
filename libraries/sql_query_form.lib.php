@@ -91,7 +91,7 @@ function PMA_getHtmlForSqlQueryForm(
         . htmlspecialchars($query) . '" />' . "\n";
 
     // display querybox
-    if ($display_tab === 'full' || $display_tab === 'sql') {
+    if ($GLOBALS['cfg']['ShowSQL'] && ($display_tab === 'full' || $display_tab === 'sql')) {
         $html .= PMA_getHtmlForSqlQueryFormInsert(
             $query, $delimiter
         );

@@ -479,6 +479,26 @@ $cfg['Servers'][$i]['savedsearches'] = '';
  * @global string $cfg['Servers'][$i]['central_columns']
  */
 $cfg['Servers'][$i]['central_columns'] = '';
+
+/**
+ * table to store information about PMA features (databases, table, columns and etc.) usable.
+ *   - leave blank to disable block/unblock feature, check also $cfg['limited_feature_policy']
+ *     SUGGESTED: 'pma__limited_features'
+ *
+ * @global string $cfg['Servers'][$i]['limited_features']
+ */
+$cfg['Servers'][$i]['limited_features'] = '';
+
+/**
+ * table to store list of custom tools
+ *   - leave blank to disable list of custom tools
+ *     SUGGESTED: 'pma__custom_tools'
+ *
+ * @global string $cfg['Servers'][$i]['custom_tools']
+ */
+$cfg['Servers'][$i]['custom_tools'] = '';
+
+
 /**
  * Maximum number of records saved in $cfg['Servers'][$i]['table_uiprefs'] table.
  *
@@ -1015,6 +1035,12 @@ $cfg['ShowChgPassword'] = true;
  */
 $cfg['ShowCreateDb'] = true;
 
+/**
+ * show console
+ *
+ * @global boolean $cfg['ShowConsole']
+ */
+$cfg['ShowConsole'] = true;
 
 /*******************************************************************************
  * Database structure
@@ -2987,5 +3013,10 @@ $cfg['DefaultFunctions'] = array(
  * Max rows retreived for zoom search
  */
 $cfg['maxRowPlotLimit'] = 500;
+
+/**
+ * Limited features default policy
+ */
+$cfg['limited_feature_policy'] = "deny";
 
 ?>

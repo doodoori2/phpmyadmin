@@ -497,7 +497,9 @@ if ($token_mismatch) {
         /* Permit redirection with token-mismatch in url.php */
         'url',
         /* Permit session expiry flag */
-        'session_expired'
+        'session_expired',
+        /* Limited PMA using */
+        'custom_tool'
     );
     /**
      * Allow changing themes in test/theme.php
@@ -528,6 +530,13 @@ PMA_setGlobalDbOrTable('db');
  * @global string $GLOBALS['table']
  */
 PMA_setGlobalDbOrTable('table');
+
+/**
+ * current selected custom_tool
+ * @global string $GLOBALS['custom_tool']
+ */
+PMA_setGlobalDbOrTable('custom_tool');
+
 
 /**
  * Store currently selected recent table.

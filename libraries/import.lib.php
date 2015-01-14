@@ -79,6 +79,12 @@ function PMA_importRunQuery($sql = '', $full = '', $controluser = false,
         $skip_queries, $executed_queries, $max_sql_len, $read_multiply,
         $cfg, $sql_query_disabled, $db, $run_query, $is_superuser;
     $read_multiply = 1;
+
+    if(!isAvailableFeature("directQuery", "import")) {
+        return;
+    }
+
+
     if (!isset($import_run_buffer)) {
         // Do we have something to push into buffer?
         $import_run_buffer = PMA_ImportRunQuery_post(

@@ -8,6 +8,7 @@
 if (! defined('PHPMYADMIN')) {
     exit;
 }
+require_once 'libraries/custom_tools/custom_tools.lib.php';
 
 /**
  * Misc functions used all over the scripts.
@@ -4111,8 +4112,7 @@ class PMA_Util
                 'triggers'    => __('Triggers'),
                 'tracking'    => __('Tracking'),
                 'designer'    => __('Designer'),
-	            'central_columns' => __('Central columns'),
-                'tools' => "Tools"
+                'central_columns' => __('Central columns')
             ),
             'table'  => array(
                 'browse'      => __('Browse'),
@@ -4125,8 +4125,9 @@ class PMA_Util
                 'privileges'  => __('Privileges'),
                 'operation'   => __('Operations'),
                 'tracking'    => __('Tracking'),
-                'triggers'    => __('Triggers'),
-            )
+                'triggers'    => __('Triggers')
+            ),
+            'custom_tool'  => getMenuCustomTabList()
         );
 
         if ($level == null) {

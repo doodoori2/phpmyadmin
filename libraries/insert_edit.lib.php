@@ -1947,6 +1947,15 @@ function PMA_executeSqlQuery($url_params, $query)
             }
             $GLOBALS['dbi']->freeResult($result);
         }
+
+        // add history
+        PMA_setHistory(
+            PMA_ifSetOr($GLOBALS['db'], ''),
+            PMA_ifSetOr($GLOBALS['table'], ''),
+            $GLOBALS['cfg']['Server']['user'],
+            $GLOBALS['sql_query']
+        );
+
         $warning_messages = PMA_getWarningMessages();
     }
     return array(

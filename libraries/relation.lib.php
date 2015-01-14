@@ -417,6 +417,8 @@ function PMA_checkRelationsParam()
     $cfgRelation['allworks']       = false;
     $cfgRelation['savedsearcheswork'] = false;
     $cfgRelation['central_columnswork'] = false;
+    $cfgRelation['limited_featureswork'] = false;
+    $cfgRelation['custom_toolswork'] = false;
     $cfgRelation['user']           = null;
     $cfgRelation['db']             = null;
 
@@ -488,8 +490,10 @@ function PMA_checkRelationsParam()
             $cfgRelation['savedsearches']    = $curr_table[0];
         } elseif ($curr_table[0] == $GLOBALS['cfg']['Server']['central_columns']) {
             $cfgRelation['central_columns']    = $curr_table[0];
-        } elseif ($curr_table[0] == $GLOBALS['cfg']['Server']['limited_pma']) {
-            $cfgRelation['limited_pma']    = $curr_table[0];
+        } elseif ($curr_table[0] == $GLOBALS['cfg']['Server']['limited_features']) {
+            $cfgRelation['limited_features']    = $curr_table[0];
+        } elseif ($curr_table[0] == $GLOBALS['cfg']['Server']['custom_tools']) {
+            $cfgRelation['custom_tools']    = $curr_table[0];
         }
     } // end while
     $GLOBALS['dbi']->freeResult($tab_rs);
@@ -552,6 +556,15 @@ function PMA_checkRelationsParam()
         $cfgRelation['central_columnswork']      = true;
     }
 
+    if (isset($cfgRelation['limited_features'])) {
+        $cfgRelation['limited_featureswork']      = true;
+    }
+
+    if (isset($cfgRelation['custom_tools'])) {
+        $cfgRelation['custom_toolswork']      = true;
+    }
+
+    // TODO check what is allworks
     if ($cfgRelation['relwork'] && $cfgRelation['displaywork']
         && $cfgRelation['pdfwork'] && $cfgRelation['commwork']
         && $cfgRelation['mimework'] && $cfgRelation['historywork']

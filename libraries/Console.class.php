@@ -12,6 +12,7 @@ if (! defined('PHPMYADMIN')) {
 require_once 'libraries/Scripts.class.php';
 require_once 'libraries/Util.class.php';
 require_once 'libraries/bookmark.lib.php';
+require_once 'libraries/limited_features.lib.php';
 
 /**
  * Class used to output the console
@@ -40,7 +41,7 @@ class PMA_Console
      */
     public function __construct()
     {
-        $this->_isEnabled = true;
+        $this->_isEnabled = isAvailableFeature('console') ? true : false;
         $this->_scripts   = new PMA_Scripts();
     }
 
